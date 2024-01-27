@@ -42,6 +42,35 @@ public class Employee {
     public void setName(String name) {
         this.name = name;
     }
+    @PrePersist
+    protected void prePersist() {
+        System.out.println("PrePersist: About to add an Employee with ID: " + employeeId);
+    }
+
+    @PostPersist
+    protected void postPersist() {
+        System.out.println("PostPersist: Added an Employee with ID: " + employeeId);
+    }
+
+    @PreUpdate
+    protected void preUpdate() {
+        System.out.println("PreUpdate: About to update Employee with ID: " + employeeId);
+    }
+
+    @PostUpdate
+    protected void postUpdate() {
+        System.out.println("PostUpdate: Updated Employee with ID: " + employeeId);
+    }
+
+    @PreRemove
+    protected void preRemove() {
+        System.out.println("PreRemove: About to remove Employee with ID: " + employeeId);
+    }
+
+    @PostRemove
+    protected void postRemove() {
+        System.out.println("PostRemove: Removed Employee with ID: " + employeeId);
+    }
 
     @Override
     public String toString() {
