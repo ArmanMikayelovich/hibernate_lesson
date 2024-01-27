@@ -1,5 +1,7 @@
 
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
+import javax.persistence.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.Set;
 
@@ -12,6 +14,8 @@ import java.util.Set;
         )
 
 })
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Employee {
     @Id
     @Column(name = "employee_id")
@@ -21,9 +25,6 @@ public class Employee {
     @Column(name = "employee_name", nullable = false)
     private String name;
 
-
-    @ManyToMany(mappedBy = "employees")
-    private Set<Organization> organizations;
 
 
     public Integer getEmployeeId() {

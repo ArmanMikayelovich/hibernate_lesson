@@ -3,6 +3,8 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+
 //OneToOne
 //OneToMany
 //ManyToOne
@@ -16,15 +18,10 @@ public class HibernateUtil {
         if (sessionFactory == null) {
             try {
                 // Create a central registry for Hibernate configuration and services.
-                registry = new StandardServiceRegistryBuilder().configure().build();
-
-                // Build Metadata from the configuration. Metadata represents Hibernate's
-                // understanding of data models, entity mappings, and database connections.
-                Metadata metadata = new MetadataSources(registry).getMetadataBuilder().build();
-
-                // Create a SessionFactory using the Metadata. The SessionFactory is a heavyweight
-                // object responsible for creating individual Hibernate Session instances.
-                sessionFactory = metadata.getSessionFactoryBuilder().build();
+                Configuration config = new Configuration();
+                config.configure();
+                // local SessionFactory bean created
+                 sessionFactory = config.buildSessionFactory();
 
             } catch (Exception e) {
                 // Handle exceptions gracefully, print stack trace for debugging purposes.

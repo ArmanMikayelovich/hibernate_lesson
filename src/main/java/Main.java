@@ -1,3 +1,4 @@
+import net.sf.ehcache.CacheManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,7 +13,6 @@ public class Main {
 
         createAndSave(session);
 
-        searchHQL(session);
 
         searchNativeQuery(session);
 
@@ -22,6 +22,9 @@ public class Main {
         transaction.commit();
         session.close();
 
+        int size = CacheManager.ALL_CACHE_MANAGERS.get(0)
+                .getCache("Employee").getSize();
+        System.out.println(size);
         // Shutdown Hibernate when you're done
         HibernateUtil.shutdown();
     }
@@ -29,7 +32,7 @@ public class Main {
     private static void searchNamedQuery(Session session) {
         Query<Employee> getById = session.createNamedQuery("get_by_id", Employee.class);
         getById.setParameter("id", 7554);
-        Employee singleResult = getById.getSingleResult();
+        Employee singleResult = getById.uniqueResultOptional().orElse(null);
         System.out.println("single result by named query" + singleResult);
     }
 
@@ -43,13 +46,6 @@ public class Main {
         }
     }
 
-    private static void searchHQL(Session session) {
-        String jpqlQuery = "from Employee where Employee.employeeId = 5";
-        Query<Employee> fromEmployee = session.createQuery(jpqlQuery, Employee.class);
-        for (Employee employee2 : fromEmployee.getResultList()) {
-            System.out.println("employee from HQL result:" + employee2);
-        }
-    }
 
     private static void createAndSave(Session session) {
         // Create an Employee object and persist it
